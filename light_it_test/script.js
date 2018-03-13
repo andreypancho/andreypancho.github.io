@@ -23,6 +23,8 @@ window.onload = () => {
 
   function createResultTable(data) {
     var resultHTML = `<table>`;
+
+    //thead
     resultHTML += `<tr>`;
     resultHTML += `<th></th>`;
     resultHTML += `<th>Artist</th>`;
@@ -31,6 +33,8 @@ window.onload = () => {
     resultHTML += `<th>Genre</th>`;
     resultHTML += `<th></th>`;
     resultHTML += `</tr>`;
+
+    //tbody
     for (let i = 0; i < data.results.length; i++) {
       if (i % 2 == 0) {
         var background = "background:#ccdff0";
@@ -57,14 +61,20 @@ window.onload = () => {
                                Track Price: ${check(data.results[i].trackPrice)} USD</br></td>`;
       resultHTML += `</tr>`;
     }
+
     resultHTML += `</table>`;
+
+    //table in the DOM element by id 'result'
     result.innerHTML = resultHTML;
+
 
     var rows = document.querySelectorAll('.head');
 
+    //accordion on the native JS
     for (let i = 0; i < rows.length; i++) {
       rows[i].addEventListener('click', (e) => {
         if (e.target.tagName == 'IMG') return;
+
         let flag = false;
         if (e.target.parentNode.className != 'active' && !flag) {
           let allRows = document.querySelectorAll('table tr');
@@ -76,6 +86,7 @@ window.onload = () => {
               allRows[i].lastChild.innerHTML = '<i class="fa fa-plus" aria-hidden="true"></i>';
             }
           }
+
           e.target.parentNode.className = 'active';
           e.target.parentNode.lastChild.innerHTML = '<i class="fa fa-minus" aria-hidden="true"></i>';
           e.target.parentNode.nextSibling.className = 'show';
