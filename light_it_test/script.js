@@ -4,13 +4,13 @@ window.onload = () => {
   const result = document.getElementById("result");
 
   send.addEventListener("click", () => {
-    console.log(encodeURIComponent(input.value));
+    // console.log(encodeURIComponent(input.value));
     let url = `https://itunes.apple.com/search?term=${encodeURIComponent(input.value)}`;
 
     fetch(url, { method: "GET" })
       .then(response => {
-        console.log(response.headers.get("Content-Type")); // application/json; charset=utf-8
-        console.log(response.status); // 200
+        // console.log(response.headers.get("Content-Type")); // application/json; charset=utf-8
+        // console.log(response.status); // 200
         // console.log(response.json());
         return response.json();
       })
@@ -18,47 +18,47 @@ window.onload = () => {
         // console.log(data);
         createResultTable(data);
       })
-      .catch(console.log("error"));
+    // .catch(console.log("error"));
   });
 
   function createResultTable(data) {
-    var html = `<table>`;
-    html += `<tr>`;
-    html += `<th></th>`;
-    html += `<th>Artist</th>`;
-    html += `<th>Track</th>`;
-    html += `<th>Collection</th>`;
-    html += `<th>Genre</th>`;
-    html += `<th></th>`;
-    html += `</tr>`;
+    var resultHTML = `<table>`;
+    resultHTML += `<tr>`;
+    resultHTML += `<th></th>`;
+    resultHTML += `<th>Artist</th>`;
+    resultHTML += `<th>Track</th>`;
+    resultHTML += `<th>Collection</th>`;
+    resultHTML += `<th>Genre</th>`;
+    resultHTML += `<th></th>`;
+    resultHTML += `</tr>`;
     for (let i = 0; i < data.results.length; i++) {
       if (i % 2 == 0) {
         var background = "background:#ccdff0";
       } else {
         var background = "background:#eef7ff";
       }
-      console.log(data.results[i]);
-      html += `<tr class='head' style=${background}>`;
-      html += `<td><img style='display: block;margin: 0 auto;' src=${data.results[i].artworkUrl100}></td>`;
-      html += `<td>${check(data.results[i].artistName)}</td>`;
-      html += `<td>${check(data.results[i].trackName)}</td>`;
-      html += `<td>${check(data.results[i].collectionName)}</td>`;
-      html += `<td>${check(data.results[i].primaryGenreName)}</td>`;
-      html += `<td style='text-align:center'><i class="fa fa-plus" aria-hidden="true"></i></td>`;
-      html += `</tr>`;
+      // console.log(data.results[i]);
+      resultHTML += `<tr class='head' style=${background}>`;
+      resultHTML += `<td><img style='display: block;margin: 0 auto;' src=${data.results[i].artworkUrl100}></td>`;
+      resultHTML += `<td>${check(data.results[i].artistName)}</td>`;
+      resultHTML += `<td>${check(data.results[i].trackName)}</td>`;
+      resultHTML += `<td>${check(data.results[i].collectionName)}</td>`;
+      resultHTML += `<td>${check(data.results[i].primaryGenreName)}</td>`;
+      resultHTML += `<td style='text-align:center'><i class="fa fa-plus" aria-hidden="true"></i></td>`;
+      resultHTML += `</tr>`;
 
-      html += `<tr class='hide' style=${background}>`;
-      html += `<td></td>`;
-      html += `<td colspan='2'>${artistAndTrack(data.results[i].trackViewUrl, data.results[i].artistName, data.results[i].trackName)}</br>
+      resultHTML += `<tr class='hide' style=${background}>`;
+      resultHTML += `<td></td>`;
+      resultHTML += `<td colspan='2'>${artistAndTrack(data.results[i].trackViewUrl, data.results[i].artistName, data.results[i].trackName)}</br>
                                Collection: ${check(data.results[i].collectionName)}</br>
                                Track Count: ${check(data.results[i].trackCount)}</br>
                                Price: ${check(data.results[i].collectionPrice)} USD</td>`;
-      html += `<td colspan='3'>Track duration: ${timeConverter(data.results[i].trackTimeMillis)}</br>
+      resultHTML += `<td colspan='3'>Track duration: ${timeConverter(data.results[i].trackTimeMillis)}</br>
                                Track Price: ${check(data.results[i].trackPrice)} USD</br></td>`;
-      html += `</tr>`;
+      resultHTML += `</tr>`;
     }
-    html += `</table>`;
-    result.innerHTML = html;
+    resultHTML += `</table>`;
+    result.innerHTML = resultHTML;
 
     var rows = document.querySelectorAll('.head');
 
