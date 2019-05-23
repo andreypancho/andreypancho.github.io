@@ -5,13 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
     <title>Meetup</title>
 
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link rel="stylesheet" href="./style.css">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -29,22 +31,22 @@
 
         <div class="header__timer">
             <div class="header__timer_days">
-                <div>20</div>
+                <div id="days">20</div>
                 <div>days</div>
             </div>
             <div>:</div>
             <div class="header__timer_hours">
-                <div>03</div>
+                <div id="hours">03</div>
                 <div>hours</div>
             </div>
             <div>:</div>
             <div class="header__timer_minutes">
-                <div>06</div>
+                <div id="minutes">06</div>
                 <div>minutes</div>
             </div>
             <div>:</div>
             <div class="header__timer_seconds">
-                <div>52</div>
+                <div id="seconds">52</div>
                 <div>seconds</div>
             </div>
         </div>
@@ -368,23 +370,66 @@
     </footer>
 
     <script>
-        let intervalId = 0;
-        const scrollButton = document.querySelector('#scrollUp');
+        $(document).ready(function() {
+            //scrollTop
+            $("#scrollUp").click(function() {
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 2000);
+            });
 
-        function scrollStep() {
-            if (window.pageYOffset === 0) {
-                clearInterval(intervalId);
-            }
-            window.scroll(0, window.pageYOffset - 100);
-        }
+            //timer
+            const days = document.querySelector("#days");
+            const hours = document.querySelector("#hours");
+            const minutes = document.querySelector("#minutes");
+            const seconds = document.querySelector("#seconds");
 
-        function scrollToTop() {
-            intervalId = setInterval(scrollStep, 20);
-        }
+            const offsetTime = ((+days.innerHTML * 86400 + +hours.innerHTML * 3600 + +minutes.innerHTML * 60 + +seconds.innerHTML) * 1000);
+            const timeToEvent = new Date().getTime() + offsetTime;
 
-        scrollButton.addEventListener('click', scrollToTop);
+            function newTimer() {
+                let now = new Date().getTime();
+
+                let howMuchIsLeft = (timeToEvent - now) / 1000; //in seconds
+                let day = howMuchIsLeft / 86400;
+                let hour = Math.floor((howMuchIsLeft / (60 * 60)) % 24);
+                let minute = Math.floor((howMuchIsLeft / 60) % 60);
+                let second = Math.floor(howMuchIsLeft % 60);
+
+                days.innerHTML = Math.floor(day);
+                hours.innerHTML = (hour < 10) ? "0" + hour : hour;
+                minutes.innerHTML = (minute < 10) ? "0" + minute : minute;
+                seconds.innerHTML = (second < 10) ? "0" + second : second;
+            };
+
+            setInterval(newTimer, 500);
+
+            //scrollToElement
+            $(".header__menu").click(function(e) {
+                let elementToClick = e.target.text;
+                let elementToScroll;
+                switch (elementToClick) {
+                    case "Event details":
+                        elementToScroll = $(".event-list");
+                        break;
+                    case "Speakers":
+                        elementToScroll = $(".speakers-list__content");
+                        break;
+                    case "Sponsors":
+                        elementToScroll = $(".sponsoreds");
+                        break;
+                    case "Past events":
+                        elementToScroll = $(".content");
+                        break;
+                    case "Contact":
+                        elementToScroll = $(".contact");
+                }
+                $('html, body').animate({
+                    scrollTop: $(elementToScroll).offset().top
+                }, 2000);
+            });
+        });
     </script>
-    <script src="./bundle.js"></script>
 </body>
 
 </html>
